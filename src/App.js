@@ -1,23 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { EditorState, convertToRaw } from 'draft-js';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
 
 function App() {
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{display:'flex', height:'90vh'}}>
+      <Editor
+        editorState={editorState}
+        toolbarClassName="toolbarClassName"
+        wrapperClassName="wrapperClassName"
+        editorClassName="editorClassName"
+        onEditorStateChange={setEditorState}
+      />
+      <textarea
+        style={{width:'40%', height:'100%'}}
+        disabled
+        value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
+      />
     </div>
   );
 }
